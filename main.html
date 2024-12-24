@@ -18,8 +18,34 @@
 		position: fixed;
 		width: 100vw;
 		height: 100vh;
-		background: crimson;
+		backdrop-filter: blur(4px);
+		background: #ffffffaa;
+		margin: -80px 0px 0px -10px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
 		z-index: 999;
+	}
+
+	.menu_ui {
+		width: 80vw;
+		height:80vh;
+		background: teal;
+		opacity: 0.8;
+		border-radius: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+	}
+
+	input {
+		width: 20vw;
+		margin: 6px 0px;
+		border: none;
+		border-radius: 10px;
+		padding: 6px;
 	}
   </style>
 </head>
@@ -27,9 +53,11 @@
 <body>
   <h1>ST-3 PNL Risk Identification</h1>
   <div class='menu_main'>
+	<div class='menu_ui'>
 	  <input type='text' id='max_value' placeholder='Max value on the Y-Axis'>
 	  <input type='text' id='min_value' placeholder='Minimum value on the Y-Axis'>
 	  <input type='text' id='some_value' placeholder='Max value on the Y-Axis'>
+	</div>
   </div>
   <button class='settings'>Settings</button>
   <svg width="90vw" height="90vh"></svg>
