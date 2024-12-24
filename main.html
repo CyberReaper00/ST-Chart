@@ -3,12 +3,38 @@
 
 <head>
   <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+	.settings {
+		position: fixed;
+		background: white;
+		border: 4px solid black;
+		border-radius: 10px;
+		padding: 6px;
+		margin-left: 85vw;
+		z-index: 99;
+	}
+
+	.menu_main{
+		position: fixed;
+		width: 100vw;
+		height: 100vh;
+		background: crimson;
+		z-index: 999;
+	}
+  </style>
 </head>
 
 <body>
   <h1>ST-3 PNL Risk Identification</h1>
+  <div class='menu_main'>
+	  <input type='text' id='max_value' placeholder='Max value on the Y-Axis'>
+	  <input type='text' id='min_value' placeholder='Minimum value on the Y-Axis'>
+	  <input type='text' id='some_value' placeholder='Max value on the Y-Axis'>
+  </div>
+  <button class='settings'>Settings</button>
   <svg width="90vw" height="90vh"></svg>
   <script src='main.js'></script>
+
 </body>
 
 </html>
