@@ -8,37 +8,35 @@ const svg = d3.select("svg")
   .append("g")
   .attr("transform", `translate(${margin.left},${margin.top})`);
 
-// Parse the date and time
-const parseDate = d3.timeParse("%Y-%m-%d");
-
 // Define scales
-const x = d3.scaleTime().range([0, width]);
-const y = d3.scaleLinear().range([height, 0]);
+const x = d3.scaleLinear()
+  .domain([0, 10])  // Set the x-axis domain as needed for your data
+  .range([0, width]);
+
+const y = d3.scaleLinear()
+  .domain([-200, 200])  // Set the y-axis domain to range from -200 to 200
+  .range([height, 0]);   // Maps the y-values to the height of the chart
 
 // Define the line generator
 const line = d3.line()
-  .x(d => x(d.date))
-  .y(d => y(d.value));
+  .x(d => x(d.date))  // Assuming date is used for x values
+  .y(d => y(d.value)); // Use y scale for value
 
-// Load the data
+// Load the data (can be adjusted as needed)
 d3.csv("data.csv").then(data => {
-  // Format the data
   data.forEach(d => {
-    d.date = parseDate(d.date);
+    d.date = +d.date;
     d.value = +d.value;
   });
 
-  // Set the domains for the axes
+  // Set the x and y domains based on your data
   x.domain(d3.extent(data, d => d.date));
-  y.domain([0, d3.max(data, d => d.value)]);
+  y.domain([-200, 200]); // Manually set y-domain from -200 to 200
 
   // Add the x-axis
   svg.append("g")
     .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(x))
-    .selectAll("text")
-    .attr("transform", "rotate(-45)")
-    .style("text-anchor", "end");
+    .call(d3.axisBottom(x));
 
   // Add the y-axis
   svg.append("g")
