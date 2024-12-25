@@ -14,7 +14,7 @@ const parseDate = d3.timeParse("%Y-%m-%d");
 // Define scales
 const x = d3.scaleTime().range([0, width]);
 const y = d3.scaleLinear()
-  .domain([-60, 200])
+  .domain([0, 200])
   .range([height, 0]);
 
 // Define the line generator
@@ -39,7 +39,7 @@ d3.tsv("data.tsv").then(data => {
 
   // Set the domains for the axes
   x.domain(d3.extent(data, d => d.date));
-  y.domain([-60, 200]);
+  y.domain([0, 200]);
 
   // Add the x-axis
   svg.append("g")
@@ -64,3 +64,22 @@ d3.tsv("data.tsv").then(data => {
   console.error("Error loading the data:", error);
 });
 
+/* minY = document.getElementById('min-value').innerText
+ maxY = document.getElementById('max-value').innerText
+ function open_menu() {
+	const odiv = document.getElementByClassNames('settings');
+	odiv.addEventListener('mousedown', function() {
+		div.style.display = 'block';
+	});
+}
+
+function close_menu() {
+	const cdiv = document.getElementByClassNames('menu_main');
+	cdiv.addEventListener('mousedown', function() {
+		div.style.display = 'none';
+	});
+}
+
+open_menu();
+close_menu();
+*/
