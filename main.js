@@ -1,3 +1,27 @@
+// Creating the UI for settings and data viewing
+const dtab = document.querySelector('#tabs td:nth-of-type(1) div');
+const stab = document.querySelector('#tabs td:nth-of-type(2) div');
+const bgcolor = 'skyblue';
+
+dtab.addEventListener('click', () => {
+  stab.style.borderColor = 'gray';
+  stab.style.borderBottomColor = bgcolor;
+  dtab.style.borderColor = bgcolor;
+});
+
+stab.addEventListener('click', () => {
+  dtab.style.borderColor = 'gray';
+  dtab.style.borderBottomColor = bgcolor;
+  stab.style.borderColor = bgcolor;
+});
+
+/*
+minY = document.getElementById('min-value').innerText
+maxY = document.getElementById('max-value').innerText
+*/
+
+// -------------------- SVG Code --------------------
+
 // Set dimensions and margins of the chart
 const margin = { top: 20, right: 30, bottom: 50, left: 50 };
 const width = window.innerWidth * 0.8 - margin.left - margin.right; // 90% of the viewport width
@@ -70,7 +94,3 @@ d3.tsv("data.tsv").then(data => {
   console.error("Error loading the data:", error);
 });
 
-/*
- minY = document.getElementById('min-value').innerText
- maxY = document.getElementById('max-value').innerText
-*/
