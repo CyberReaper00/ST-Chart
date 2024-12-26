@@ -1,3 +1,5 @@
+// -------------------- UI Code --------------------
+
 // Creating the UI for settings and data viewing
 const dtab = document.querySelector('#tabs td:nth-of-type(1) div');
 const stab = document.querySelector('#tabs td:nth-of-type(2) div');
@@ -28,6 +30,36 @@ stab.addEventListener('click', () => {
   }
   stab.style.borderColor = bgcolor;
 });
+    // Load the data from the TSV file
+    d3.tsv("data.tsv").then(data => {
+      // Create a container for the data entries
+      const dataContainer = document.createElement('div');
+      dataContainer.classList.add('data_view');
+      document.querySelector('#view').appendChild(dataContainer); // Append the container to #view
+
+      // Loop through each data point and format it
+      data.forEach((d, i) => {
+        // Create a div for each data point
+        const dataDiv = document.createElement('div');
+        dataDiv.classList.add('data-entry'); // Add a class for styling
+
+        // Format the data
+	const dPoints = document.createElement('p');
+	dPoints.innerHTML = `Index: ${i+1}` + '<br>' + `Date: ${d.date}` + '<br>' + `Value: ${d.value}`;
+
+	console.log(d.date);
+
+        // Append the paragraph to the dataDiv
+        dataDiv.appendChild(dPoints);
+
+        // Append the dataDiv to the container
+        dataContainer.appendChild(dataDiv);
+      });
+    }).catch(error => {
+      console.error("Error loading the data:", error);
+    });
+
+// -------------------- UI Code --------------------
 
 // -------------------- SVG Code --------------------
 
@@ -93,6 +125,7 @@ d3.tsv("data.tsv").then(data => {
   // Add the line path
   svg.append("path")
     .datum(data)
+    .attr("class", "line")
     .attr("fill", "none")
     .attr("stroke", "steelblue")
     .attr("stroke-width", 2)
@@ -170,4 +203,4 @@ d3.tsv("data.tsv").then(data => {
 }).catch(error => {
   console.error("Error loading the data:", error);
 });
-
+// -------------------- SVG Code --------------------

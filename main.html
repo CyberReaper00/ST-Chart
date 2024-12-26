@@ -6,16 +6,18 @@
   <style>
 
     :root {
-      --bgcolor: skyblue;
-    }
-
-    .dot_rect {
-      fill: red !important;
-      cursor: pointer;
+      --bgcolor: steelblue;
+      --bgchart: teal;
     }
 
     .dot_circ {
-      fill: blue;
+      r: 6;
+      cursor: pointer;
+      fill: var(--bgchart);
+    }
+
+    .line {
+      stroke: var(--bgchart);
     }
 
     .tooltip-value, .tooltip-represented {
@@ -37,7 +39,7 @@
       margin-left: 85vw;
       width: 10vw;
     }
-    
+
     #tabs div {
       width: 84%;
       border: 4px solid var(--bgcolor);
@@ -53,15 +55,17 @@
     #view {
       width: 92%;
       height: 50vh;
+      color: white;
       padding: 6px;
       margin-top: -4px;
       border-radius: 0px 0px 10px 10px;
       background: var(--bgcolor);
     }
 
-    #view textarea {
+    .data_view {
       width: 100%;
       height: 100%;
+      overflow-y: scroll;
     }
 
     td {
@@ -96,7 +100,6 @@
 	  <div id='view'>
 	    <input type='text' placeholder='jdhfkjsh'>
 	    <input type='text' placeholder='jdhfkjsh'>
-	    <textarea></textarea>
 	  </div>
 	</td>
       </tr>
