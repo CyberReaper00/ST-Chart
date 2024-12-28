@@ -6,8 +6,25 @@
   <style>
 
     :root {
-      --bgcolor: steelblue;
+      --bgsb: #36454F;
       --bgchart: teal;
+    }
+
+    h1 {
+      color: white;
+    }
+
+    body {
+      background: #000000cf;
+    }
+
+    .xline path, .yline path,
+    .xline line, .yline line{
+      stroke: white;
+    }
+
+    .xline text, .yline text{
+      fill: white;
     }
 
     .dot_circ {
@@ -45,13 +62,22 @@
       width: 100%;
     }
 
+    #tab1 {
+      height: 100%;
+    }
+
+    #tab2 {
+      display: none;
+    }
+
     #tabs div {
-      width: 84%;
+      width: 82.5%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: skyblue;
-      border: 4px solid var(--bgcolor);
+      background: white;
+      color: black;
+      border: 4px solid var(--bgsb);
       border-radius: 10px 10px 0px 0px;
       padding: 3px 3px 1px 3px;
     }
@@ -59,7 +85,7 @@
     #tabs td:nth-of-type(2) div {
       background: darkgray;
       border-color: gray;
-      border-bottom-color: var(--bgcolor);
+      border-bottom-color: var(--bgsb);
     }
 
     #view {
@@ -69,7 +95,7 @@
       padding: 6px;
       margin-top: -6px;
       border-radius: 0px 0px 10px 10px;
-      background: var(--bgcolor);
+      background: var(--bgsb);
     }
 
     .data_view {
@@ -97,7 +123,6 @@
       width: 90%;
       border: none;
       border-radius: 10px;
-      display: none;
       padding: 4px;
       margin: 10px 0px 0px 0px;
     }
@@ -119,14 +144,19 @@
       <tr>
 	<td colspan='2'>
 	  <div id='view'>
-	    <input type='text' placeholder='currently does nothing'>
-	    <input type='text' placeholder='currently does nothing'>
+	    <div id='tab1'>
+	      <div class='data_view'></div>
+	    </div>
+	    <div id='tab2'>
+	      <input type='text' placeholder='currently does nothing'>
+	      <input type='text' placeholder='currently does nothing'>
+	    </div>
 	  </div>
 	</td>
       </tr>
     </table>
   </div>
-  <svg width="90vw" height="90vh"></svg>
+  <svg width="85vw" height="80vh"></svg>
   <script src='main.js'></script>
 
 </body>

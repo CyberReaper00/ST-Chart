@@ -1,42 +1,34 @@
-// -------------------- UI Code --------------------
+// -------------------- Data Loading and UI Rendering --------------------
 
-// Creating the UI for settings and data viewing
 const dtab = document.querySelector('#tabs td:nth-of-type(1) div');
 const stab = document.querySelector('#tabs td:nth-of-type(2) div');
-const inputs = document.querySelectorAll('#view input');
-const bgcolor = 'steelblue';
+const dview = document.querySelector('#tab1');
+const sview = document.querySelector('#tab2');
+const bgcolor = 'white';
+const bgsb = '#36454F';
 
-dtab.addEventListener('click', () => {
-  stab.style.borderColor = 'gray';
-  stab.style.borderBottomColor = bgcolor;
+dtab.addEventListener('click', function () {
+  dtab.style.background = bgcolor;
+  dtab.style.borderColor = bgsb;
+  dtab.style.color = 'black';
   stab.style.background = 'darkgray';
-  inputs.forEach(input => {
-    input.style.display = 'none';
-  });
-  const dView = document.querySelector('.data_view');
-  if (dView) {
-    dView.style.display = 'block';
-  }
-  dtab.style.borderColor = bgcolor;
-  dtab.style.background = 'skyblue';
+  stab.style.borderColor = 'gray';
+  stab.style.borderBottomColor = bgsb;
+  dview.style.display = 'block';
+  sview.style.display = 'none';
+
 });
 
-stab.addEventListener('click', () => {
-  dtab.style.borderColor = 'gray';
-  dtab.style.borderBottomColor = bgcolor;
+stab.addEventListener('click', function () {
+  stab.style.background = bgcolor;
+  stab.style.borderColor = bgsb;
   dtab.style.background = 'darkgray';
-  inputs.forEach(input => {
-    input.style.display = 'block';
-  });
-  const dView = document.querySelector('.data_view');
-  if (dView) {
-    dView.style.display = 'none';
-  }
-  stab.style.borderColor = bgcolor;
-  stab.style.background = 'skyblue';
-});
+  dtab.style.borderColor = 'gray';
+  dtab.style.borderBottomColor = bgsb;
+  dview.style.display = 'none';
+  sview.style.display = 'block';
 
-// -------------------- Data Loading and UI Rendering --------------------
+});
 
 // Parse the date and time
 const parseDate = d3.timeParse("%Y-%m-%d");
@@ -58,17 +50,19 @@ d3.tsv("data.tsv").then(data => {
     if (hVal < d.relativeValue) {
       hVal = d.relativeValue;
     }
+
+    // Assign unique ID for each data point
+    d.id = i; 
   });
 
-  // Create a container for the data entries
-  const dataContainer = document.createElement('div');
-  dataContainer.classList.add('data_view');
-  document.querySelector('#view').appendChild(dataContainer);
+  // Get the container for the data entries
+  const dataContainer = document.querySelector('.data_view');
 
   // Render each data point
   data.forEach((d, i) => {
     const dataDiv = document.createElement('div');
-    dataDiv.classList.add('data-entry'); // Add a class for styling
+    dataDiv.classList.add('data-entry');
+    dataDiv.setAttribute('data-id', d.id); // Set a data-id attribute for easy reference
 
     const dPoints = document.createElement('p');
     dPoints.innerHTML = `Index: ${i + 1}<br>Date: ${d3.timeFormat("%Y-%m-%d")(d.date)}<br>Value: ${d.value}<br>Chart Value: ${d.relativeValue.toFixed(2)}`;
@@ -78,10 +72,10 @@ d3.tsv("data.tsv").then(data => {
   });
 
   // -------------------- SVG Code --------------------
-  
-  const margin = { top: 20, right: 30, bottom: 50, left: 50 };
+
+  const margin = { top: 20, right: 30, bottom: 0, left: 50 };
   const width = window.innerWidth * 0.8 - margin.left - margin.right;
-  const height = window.innerHeight * 0.8 - margin.top - margin.bottom;
+  const height = window.innerHeight * 0.7 - margin.top - margin.bottom;
 
   const svg = d3.select("svg")
     .append("g")
@@ -104,13 +98,16 @@ d3.tsv("data.tsv").then(data => {
   // Add the x-axis
   svg.append("g")
     .attr("transform", `translate(0,${height})`)
+    .attr("class", "xline")
     .call(d3.axisBottom(x))
     .selectAll("text")
     .attr("transform", "rotate(-45)")
     .style("text-anchor", "end");
 
   // Add the y-axis
-  svg.append("g").call(d3.axisLeft(y));
+  svg.append("g")
+    .attr("class", "yline")
+    .call(d3.axisLeft(y));
 
   // Add the line path
   svg.append("path")
@@ -148,10 +145,22 @@ d3.tsv("data.tsv").then(data => {
       .attr("y", yPosition - 20)
       .attr("text-anchor", "middle")
       .text(`Chart: ${d.relativeValue.toFixed(2)}`);
+
+    // Highlight the corresponding div
+    const div = document.querySelector(`.data-entry[data-id='${d.id}']`);
+    if (div) {
+      div.style.backgroundColor = '#00000066'; // Highlight the div
+    }
   }
 
-  function mouseoutFunc() {
+  function mouseoutFunc(event, d) {
     svg.selectAll(".tooltip-group").remove();
+
+    // Reset the corresponding div's background color
+    const div = document.querySelector(`.data-entry[data-id='${d.id}']`);
+    if (div) {
+      div.style.backgroundColor = ''; // Reset the div's background color
+    }
   }
 
   // Add dots for each data point
@@ -159,6 +168,7 @@ d3.tsv("data.tsv").then(data => {
     .data(data)
     .enter().append("circle")
     .attr("class", "dot_circ")
+    .attr("data-id", (d) => d.id) // Set a data-id for each dot for easy reference
     .attr("cx", d => x(d.date))
     .attr("cy", d => y(d.relativeValue))
     .attr("r", 5)
@@ -166,7 +176,46 @@ d3.tsv("data.tsv").then(data => {
     .on("mouseover", mouseoverFunc)
     .on("mouseout", mouseoutFunc);
 
+  const tooltip = d3.select('body')
+  .append('div')
+  .style('position', 'absolute')
+  .style('visibility', 'hidden')
+  .style('background-color', 'white')
+  .style('border', '1px solid gray')
+  .style('padding', '5px')
+  .style('border-radius', '4px')
+  .style('box-shadow', '0 2px 5px rgba(0,0,0,0.3)');
+
+  // Add event listeners to div elements
+  document.querySelectorAll('.data-entry').forEach(div => {
+    div.addEventListener('mouseover', function () {
+      const pointId = this.getAttribute('data-id');
+      const dataPoint = data[pointId]; // Access the data for the corresponding point
+     
+      // Set tooltip content
+      tooltip.html(`
+	<strong>Value:</strong> ${dataPoint.value}<br>
+	<strong>Chart:</strong> ${dataPoint.relativeValue.toFixed(2)}
+      `);
+  
+      // Show the tooltip at a fixed position (e.g., top-right corner)
+      tooltip
+	.style('top', '100px') // Fixed Y position
+	.style('left', '70px') // Fixed X position
+	.style('visibility', 'visible');
+     
+      // Highlight the corresponding dot
+      d3.select(`.dot_circ[data-id='${pointId}']`).style('fill', 'orange');
+    });
+  
+    div.addEventListener('mouseout', function () {
+      tooltip.style('visibility', 'hidden'); // Hide the tooltip
+      const pointId = this.getAttribute('data-id');
+      d3.select(`.dot_circ[data-id='${pointId}']`).style('fill', '');
+    });
+  });
+
+
 }).catch(error => {
   console.error("Error loading the data:", error);
 });
-
