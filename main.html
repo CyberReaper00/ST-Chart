@@ -4,10 +4,10 @@
 <head>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
-
     :root {
       --bgsb: #36454F;
       --bgchart: teal;
+      --xy-color: white;
     }
 
     h1 {
@@ -19,12 +19,12 @@
     }
 
     .xline path, .yline path,
-    .xline line, .yline line{
-      stroke: white;
+    .xline line, .yline line {
+      stroke: var(--xy-color);
     }
 
-    .xline text, .yline text{
-      fill: white;
+    .xline text, .yline text {
+      fill: var(--xy-color);
     }
 
     .dot_circ {
@@ -98,6 +98,10 @@
       background: var(--bgsb);
     }
 
+    .chart_type {
+      display: none;
+    }
+
     .data_view {
       width: 100%;
       height: 100%;
@@ -126,6 +130,28 @@
       padding: 4px;
       margin: 10px 0px 0px 0px;
     }
+
+    select {
+      width: 90%;
+      padding: 5px;
+      margin: 10px 0px 0px 0px;
+      border-radius: 10px;
+    }
+
+    .sbutton {
+      border: none;
+      border-radius: 10px;
+      margin: 10px 19%; 
+      padding: 4px 8px;
+      background: #00000088;
+      color: white;
+    }
+
+    .sbutton:hover {
+      background: #00000033;
+      cursor: pointer;
+    }
+
   </style>
 </head>
 
@@ -134,31 +160,35 @@
   <div class='menu_main'>
     <table>
       <tr id='tabs'>
-	<td>
-	  <div>Data</div>
-	</td>
-	<td>
-	  <div>Settings</div>
-	</td>
+        <td>
+          <div>Data</div>
+        </td>
+        <td>
+          <div>Settings</div>
+        </td>
       </tr>
       <tr>
-	<td colspan='2'>
-	  <div id='view'>
-	    <div id='tab1'>
-	      <div class='data_view'></div>
+        <td colspan='2'>
+          <div id='view'>
+            <div id='tab1'>
+              <div class='data_view'></div>
+            </div>
+	    <div id="tab2">
+	      <select class="chart_type">
+		<option value="line">Line Chart</option>
+		<option value="bar">Bar Chart</option>
+	      </select>
+	      <input class='xy_value' type='text' placeholder='Changes color of the axes'>
+	      <input class='line_color' type='text' placeholder='Changes color of the graph'>
+	      <button class='sbutton'>Save Changes</button>
 	    </div>
-	    <div id='tab2'>
-	      <input type='text' placeholder='currently does nothing'>
-	      <input type='text' placeholder='currently does nothing'>
-	    </div>
-	  </div>
-	</td>
+          </div>
+        </td>
       </tr>
     </table>
   </div>
   <svg width="85vw" height="80vh"></svg>
   <script src='main.js'></script>
-
 </body>
 
 </html>

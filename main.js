@@ -30,6 +30,21 @@ stab.addEventListener('click', function () {
 
 });
 
+function all_changes() {
+  const save = document.querySelector('.sbutton');
+
+  save.addEventListener('click', function() {
+    const xy_line = document.querySelector('.xy_value').value;
+    const chart_line = document.querySelector('.line_color').value;
+    const set_root = document.documentElement.style;
+
+    set_root.setProperty('--xy-color', xy_line);
+    set_root.setProperty('--bgchart', chart_line);
+  })
+}
+
+all_changes();
+
 // Parse the date and time
 const parseDate = d3.timeParse("%Y-%m-%d");
 
@@ -118,6 +133,30 @@ d3.tsv("data.tsv").then(data => {
     .attr("stroke-width", 2)
     .attr("d", line);
 
+
+  // Add dots for each data point
+  svg.selectAll(".dot")
+    .data(data)
+    .enter().append("circle")
+    .attr("class", "dot_circ")
+    .attr("data-id", (d) => d.id) // Set a data-id for each dot for easy reference
+    .attr("cx", d => x(d.date))
+    .attr("cy", d => y(d.relativeValue))
+    .attr("r", 5)
+    .attr("fill", "steelblue")
+    .on("mouseover", mouseoverFunc)
+    .on("mouseout", mouseoutFunc);
+
+  const tooltip = d3.select('body')
+  .append('div')
+  .style('position', 'absolute')
+  .style('visibility', 'hidden')
+  .style('background-color', 'white')
+  .style('border', '1px solid gray')
+  .style('padding', '5px')
+  .style('border-radius', '4px')
+  .style('box-shadow', '0 2px 5px rgba(0,0,0,0.3)');
+  
   // Tooltip functions
   function mouseoverFunc(event, d) {
     const [xPosition, yPosition] = d3.pointer(event, svg.node());
@@ -162,29 +201,6 @@ d3.tsv("data.tsv").then(data => {
       div.style.backgroundColor = ''; // Reset the div's background color
     }
   }
-
-  // Add dots for each data point
-  svg.selectAll(".dot")
-    .data(data)
-    .enter().append("circle")
-    .attr("class", "dot_circ")
-    .attr("data-id", (d) => d.id) // Set a data-id for each dot for easy reference
-    .attr("cx", d => x(d.date))
-    .attr("cy", d => y(d.relativeValue))
-    .attr("r", 5)
-    .attr("fill", "steelblue")
-    .on("mouseover", mouseoverFunc)
-    .on("mouseout", mouseoutFunc);
-
-  const tooltip = d3.select('body')
-  .append('div')
-  .style('position', 'absolute')
-  .style('visibility', 'hidden')
-  .style('background-color', 'white')
-  .style('border', '1px solid gray')
-  .style('padding', '5px')
-  .style('border-radius', '4px')
-  .style('box-shadow', '0 2px 5px rgba(0,0,0,0.3)');
 
   // Add event listeners to div elements
   document.querySelectorAll('.data-entry').forEach(div => {
