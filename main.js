@@ -46,15 +46,16 @@ function all_changes() {
 all_changes();
 
 // Parse the date and time
-const parseDate = d3.timeParse("%Y-%m-%d");
+const parseDate = d3.timeParse("%d-%m-%y | %H:%M");
 
 // Load the data from the TSV file
-d3.tsv("data.tsv").then(data => {
+d3.csv("data.csv").then(data => {
+
   // Format the data and calculate relative values
   let hVal = 0;
   data.forEach((d, i) => {
     d.date = parseDate(d.date);
-    d.value = +d.value;
+    d.value = +d.value; // Ensure this is properly parsed as a number
 
     if (i > 0) {
       d.relativeValue = data[i - 1].relativeValue + (data[i - 1].relativeValue * (d.value / 100));
@@ -80,7 +81,7 @@ d3.tsv("data.tsv").then(data => {
     dataDiv.setAttribute('data-id', d.id); // Set a data-id attribute for easy reference
 
     const dPoints = document.createElement('p');
-    dPoints.innerHTML = `Index: ${i + 1}<br>Date: ${d3.timeFormat("%Y-%m-%d")(d.date)}<br>Value: ${d.value}<br>Chart Value: ${d.relativeValue.toFixed(2)}`;
+    dPoints.innerHTML = `Index: ${i + 1}<br>Date: ${d3.timeFormat("%d-%m-%y | %H:%M")(d.date)}<br>Value: ${d.value}<br>Chart Value: ${d.relativeValue.toFixed(2)}`;
     dataDiv.appendChild(dPoints);
 
     dataContainer.appendChild(dataDiv);
