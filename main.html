@@ -8,15 +8,18 @@
       --bgsb: #36454F;
       --bgchart: teal;
       --xy-color: white;
-    }
-
-    h1 {
-      color: white;
+      --r-size: 4;
     }
 
     body {
       background: #000000cf;
     }
+
+    h1 {
+      color: white;
+      margin-bottom: -10px !important;
+    }
+
 
     .xline path, .yline path,
     .xline line, .yline line {
@@ -28,7 +31,7 @@
     }
 
     .dot_circ {
-      r: 6;
+      r: var(--r-size);
       cursor: pointer;
       fill: var(--bgchart);
     }
@@ -119,6 +122,10 @@
       background: #00000033;
     }
 
+    .data-entry:hover {
+      background: #00000066;
+    }
+
     td {
       width: 50%;
     }
@@ -156,7 +163,7 @@
 </head>
 
 <body>
-  <h1>ST-3 PNL Risk Identification</h1>
+  <h1 class='main_head'>ST-3 PNL Risk Identification</h1>
   <div class='menu_main'>
     <table>
       <tr id='tabs'>
@@ -178,8 +185,10 @@
 		<option value="line">Line Chart</option>
 		<option value="bar">Bar Chart</option>
 	      </select>
-	      <input class='xy_value' type='text' placeholder='Changes color of the axes'>
-	      <input class='line_color' type='text' placeholder='Changes color of the graph'>
+	      <input class='search' type='text' placeholder='Searches for data file'>
+	      <input class='r_val' type='number' placeholder='Changes the dot size'>
+	      <input class='xy_val' type='text' placeholder='Changes color of the axes'>
+	      <input class='ln_clr' type='text' placeholder='Changes color of the graph'>
 	      <button class='sbutton'>Make Changes</button>
 	    </div>
           </div>

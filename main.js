@@ -34,12 +34,15 @@ function all_changes() {
   const save = document.querySelector('.sbutton');
 
   save.addEventListener('click', function() {
-    const xy_line = document.querySelector('.xy_value').value;
-    const chart_line = document.querySelector('.line_color').value;
     const set_root = document.documentElement.style;
+    const point_rad = document.querySelector('.r_val').value;
+    const xy_line = document.querySelector('.xy_val').value;
+    const chart_line = document.querySelector('.ln_clr').value;
 
+    set_root.setProperty('--r-size', point_rad);
     set_root.setProperty('--xy-color', xy_line);
     set_root.setProperty('--bgchart', chart_line);
+
   })
 }
 
