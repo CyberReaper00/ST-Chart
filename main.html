@@ -1,203 +1,202 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <style>
-    :root {
-      --bgsb: #36454F;
-      --bgchart: teal;
-      --xy-color: white;
-      --r-size: 4;
-    }
+    <head>
+	<script src="https://d3js.org/d3.v7.min.js"></script>
+	<style>
+:root {
+    --bgsb: #36454F;
+    --bgchart: teal;
+    --xy-color: white;
+    --r-size: 4;
+}
 
     body {
-      background: #000000cf;
+	background: #000000cf;
     }
 
     h1 {
-      color: white;
-      margin-bottom: -10px !important;
+	color: white;
+	margin-bottom: -10px !important;
     }
 
 
     .xline path, .yline path,
     .xline line, .yline line {
-      stroke: var(--xy-color);
+	stroke: var(--xy-color);
     }
 
     .xline text, .yline text {
-      fill: var(--xy-color);
+	fill: var(--xy-color);
     }
 
     .dot_circ {
-      r: var(--r-size);
-      cursor: pointer;
-      fill: var(--bgchart);
+	r: var(--r-size);
+	cursor: pointer;
+	fill: var(--bgchart);
     }
 
     .line {
-      stroke: var(--bgchart);
+	stroke: var(--bgchart);
     }
 
     .tooltip-value, .tooltip-represented {
-      fill: white;
-      font-size: 14px;
+	fill: white;
+	font-size: 14px;
     }
 
     .tooltip-bg {
-      width: 100px;
-      fill: black;
-      stroke: none;
-      padding: 10px;
-      rx: 5px;
-      ry: 5px;
+	width: 100px;
+	fill: black;
+	stroke: none;
+	padding: 10px;
+	rx: 5px;
+	ry: 5px;
     }
 
     .menu_main {
-      position: fixed;
-      margin-left: 82vw;
-      margin-top: -6vh;
-      width: 14vw;
+	position: fixed;
+	margin-left: 82vw;
+	margin-top: -6vh;
+	width: 14vw;
     }
 
     table {
-      width: 100%;
+	width: 100%;
     }
 
     #tab1 {
-      height: 100%;
+	height: 100%;
     }
 
     #tab2 {
-      display: none;
+	display: none;
     }
 
     #tabs div {
-      width: 82.5%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: white;
-      color: black;
-      border: 4px solid var(--bgsb);
-      border-radius: 10px 10px 0px 0px;
-      padding: 3px 3px 1px 3px;
+	width: 82.5%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background: white;
+	color: black;
+	border: 4px solid var(--bgsb);
+	border-radius: 10px 10px 0px 0px;
+	padding: 3px 3px 1px 3px;
     }
 
     #tabs td:nth-of-type(2) div {
-      background: darkgray;
-      border-color: gray;
-      border-bottom-color: var(--bgsb);
+	background: darkgray;
+	border-color: gray;
+	border-bottom-color: var(--bgsb);
     }
 
     #view {
-      width: 92%;
-      height: 80vh;
-      color: white;
-      padding: 6px;
-      margin-top: -6px;
-      border-radius: 0px 0px 10px 10px;
-      background: var(--bgsb);
+	width: 92%;
+	height: 80vh;
+	color: white;
+	padding: 6px;
+	margin-top: -6px;
+	border-radius: 0px 0px 10px 10px;
+	background: var(--bgsb);
     }
 
     .chart_type {
-      display: none;
+	display: none;
     }
 
     .data_view {
-      width: 100%;
-      height: 100%;
-      overflow-y: scroll;
-      overflow: auto; /* Enable scrolling */
-      scrollbar-width: none; /* Firefox */
-      -ms-overflow-style: none; /* IE and Edge */
+	width: 100%;
+	height: 100%;
+	overflow-y: scroll;
+	overflow: auto; /* Enable scrolling */
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* IE and Edge */
     }
 
     .data-entry {
-      font-size: 12px;
-      padding: 2px 20px;
-      margin: 4px 0px;
-      border-radius: 10px;
-      background: #00000033;
+	font-size: 12px;
+	padding: 2px 20px;
+	margin: 4px 0px;
+	border-radius: 10px;
+	background: #00000033;
     }
 
     .data-entry:hover {
-      background: #00000066;
+	background: #00000066;
     }
 
     td {
-      width: 50%;
+	width: 50%;
     }
 
     input {
-      width: 90%;
-      border: none;
-      border-radius: 10px;
-      padding: 4px;
-      margin: 10px 0px 0px 0px;
+	width: 90%;
+	border: none;
+	border-radius: 10px;
+	padding: 4px;
+	margin: 10px 0px 0px 0px;
     }
 
     select {
-      width: 90%;
-      padding: 5px;
-      margin: 10px 0px 0px 0px;
-      border-radius: 10px;
+	width: 90%;
+	padding: 5px;
+	margin: 10px 0px 0px 0px;
+	border-radius: 10px;
     }
 
     .sbutton {
-      border: none;
-      border-radius: 10px;
-      margin: 10px 19%; 
-      padding: 4px 8px;
-      background: #00000088;
-      color: white;
+	border: none;
+	border-radius: 10px;
+	margin: 10px 19%; 
+	padding: 4px 8px;
+	background: #00000088;
+	color: white;
     }
 
     .sbutton:hover {
-      background: #00000033;
-      cursor: pointer;
+	background: #00000033;
+	cursor: pointer;
     }
 
-  </style>
-</head>
+	</style>
+    </head>
 
-<body>
-  <h1 class='main_head'>ST-3 PNL Risk Identification</h1>
-  <div class='menu_main'>
-    <table>
-      <tr id='tabs'>
-        <td>
-          <div>Data</div>
-        </td>
-        <td>
-          <div>Settings</div>
-        </td>
-      </tr>
-      <tr>
-        <td colspan='2'>
-          <div id='view'>
-            <div id='tab1'>
-              <div class='data_view'></div>
-            </div>
-	    <div id="tab2">
-	      <select class="chart_type">
-		<option value="line">Line Chart</option>
-		<option value="bar">Bar Chart</option>
-	      </select>
-	      <input class='search' type='text' placeholder='Searches for data file'>
-	      <input class='r_val' type='number' placeholder='Changes the dot size'>
-	      <input class='xy_val' type='text' placeholder='Changes color of the axes'>
-	      <input class='ln_clr' type='text' placeholder='Changes color of the graph'>
-	      <button class='sbutton'>Make Changes</button>
-	    </div>
-          </div>
-        </td>
-      </tr>
-    </table>
-  </div>
-  <svg width="85vw" height="80vh"></svg>
-  <script src='main.js'></script>
-</body>
+    <body>
+	<h1 class='main_head'>ST-3 PNL Risk Identification</h1>
+	<div class='menu_main'>
+	    <table>
+		<tr id='tabs'>
+		    <td>
+			<div>Data</div>
+		    </td>
+		    <td>
+			<div>Settings</div>
+		    </td>
+		</tr>
+		<tr>
+		    <td colspan='2'>
+			<div id='view'>
+			    <div id='tab1'>
+				<div class='data_view'></div>
+			    </div>
+			    <div id="tab2">
+				<select class="chart_type">
+				    <option value="line">Line Chart</option>
+				    <option value="bar">Bar Chart</option>
+				</select>
+				<input class='r_val' type='number' placeholder='Changes the dot size'>
+				<input class='xy_val' type='text' placeholder='Changes color of the axes'>
+				<input class='ln_clr' type='text' placeholder='Changes color of the graph'>
+				<button class='sbutton'>Make Changes</button>
+			    </div>
+			</div>
+		    </td>
+		</tr>
+	    </table>
+	</div>
+	<svg width="85vw" height="80vh"></svg>
+	<script src='main.js'></script>
+    </body>
 
 </html>
