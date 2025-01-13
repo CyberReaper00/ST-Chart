@@ -20,12 +20,12 @@ connection.login(username, password)
 connection.select('INBOX')
 
 # Search for emails with the specific subject
-status, ids = connection.search(None, '(SUBJECT "Alert: vbnvbn")')
+status, ids = connection.search(None, '(UNSEEN SUBJECT "Alert: iopiop")')
 ids = ids[0].split()
 
 # Prepare a dictionary to hold the data from each email
 email_data = {'email1': [], 'email2': [], 'email3': [], 'email4': []}
-
+file_name = input('Please input name of file: ')
 # Loop through the email IDs and fetch the emails
 for idx, email_id in enumerate(ids):
     status, data = connection.fetch(email_id, '(RFC822)')
@@ -45,13 +45,13 @@ for idx, email_id in enumerate(ids):
         first_line = email_content[0].strip().lower()
 
         if first_line == "date":
-            email_data['email1'].append(email_content[1:])  # Collect all lines after the first
+            email_data['email1'].extend(email_content[1:])  # Collect all lines after the first
         elif first_line == "time":
-            email_data['email2'].append(email_content[1:])  # Collect all lines after the first
+            email_data['email2'].extend(email_content[1:])  # Collect all lines after the first
         elif first_line == "value":
-            email_data['email3'].append(email_content[1:])  # Collect all lines after the first
+            email_data['email3'].extend(email_content[1:])  # Collect all lines after the first
         elif not first_line:
-            email_data['email4'].append(email_content[1:])  # Collect all lines after the first
+            email_data['email4'].extend(email_content[1:])  # Collect all lines after the first
 
 
 # Prepare the combined data
@@ -60,22 +60,30 @@ max_lines = max(len(content) for content in email_data.values())  # Get the long
 combined_data = []
 combined_data.append('data,value')
 
-# Add headers for the file (email1, email2, email3, ...)
-headers = [f'email_{i+1}' for i in range(len(email_data))]
-combined_data.append(' - '.join(headers))
-
 # Combine the data line by line
+email1_data = email_data['email1']
+email2_data = email_data['email2']
+email3_data = email_data['email3']
+
 for i in range(max_lines):
     row = []
-    for email_key in email_data:
-        if i < len(email_data[email_key]):
-            row.append(email_data[email_key][i])
-        else:
-            row.append('')  # Empty cell if the email has fewer lines
-    combined_data.append(' -- '.join(row))
+    if i < len(email1_data):
+        row.append(email1_data[i])
+    if i < len(email2_data):
+        row.append(email2_data[i])
+    if i < len(email3_data):
+        row.append(email3_data[i])
+
+    if len(row) > 0:
+        combined_row = f"{row[0]} | {row[1]},{row[2]}" if len(row) == 3 else ' '.join(row)
+        combined_data.append(combined_row)
+
+for i in range(max_lines):
+    if i < len(email_data['email4']):
+        combined_data.append(email_data['email4'][i])
 
 # Write the combined data to a text file in the same directory
-with open('combined_data.txt', 'w') as f:
+with open(f"{file_name}.csv", 'w') as f:
     for line in combined_data:
         f.write(line + '\n')
 
