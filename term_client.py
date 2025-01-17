@@ -1,3 +1,19 @@
+import sys
+import subprocess
+
+def install(package):
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', package])
+
+dependencies = ['imaplab', 'email']
+
+for package in dependencies:
+    try:
+        __import__(package)
+    except ImportError:
+        print(f"'{package}' is not installed. Installing now...")
+        install(package)
+        print(f"'{package}' installed successfully")
+
 import imaplib
 import email
 from email.policy import default
@@ -20,7 +36,7 @@ connection.login(username, password)
 connection.select('INBOX')
 
 # Search for emails with the specific subject
-status, ids = connection.search(None, '(UNSEEN SUBJECT "Alert: iopiop")')
+status, ids = connection.search(None, '(UNSEEN SUBJECT "Alert: st3-data")')
 ids = ids[0].split()
 
 # Prepare a dictionary to hold the data from each email
