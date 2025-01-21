@@ -4,7 +4,7 @@ import subprocess
 def install(package):
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', package])
 
-dependencies = ['imaplab', 'email']
+dependencies = ['imaplib', 'email']
 
 for package in dependencies:
     try:
@@ -24,7 +24,7 @@ port = 993  # For SSL connection
 
 # Credentials
 username = 'simple.nahyan@gmail.com'
-password = 'fsyu dobj wbaj pkuq'  # Use the app password
+password = 'lwio yyfz iued ogzl'  # Use the app password
 
 # Connect to the Gmail IMAP server
 connection = imaplib.IMAP4_SSL(server, port)
@@ -36,7 +36,7 @@ connection.login(username, password)
 connection.select('INBOX')
 
 # Search for emails with the specific subject
-status, ids = connection.search(None, '(UNSEEN SUBJECT "Alert: st3-data")')
+status, ids = connection.search(None, '(UNSEEN SUBJECT "Alert: chart-data")')
 ids = ids[0].split()
 
 # Prepare a dictionary to hold the data from each email
@@ -74,7 +74,7 @@ for idx, email_id in enumerate(ids):
 max_lines = max(len(content) for content in email_data.values())  # Get the longest email content length
 
 combined_data = []
-combined_data.append('data,value')
+combined_data.append('date,value')
 
 # Combine the data line by line
 email1_data = email_data['email1']

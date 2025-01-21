@@ -1,4 +1,5 @@
 // -------------------- Data Loading and UI Rendering --------------------
+// if you see any lines with ==> // err(...) <== then it means that is a debug message, just remove the // before it and it will send debug messages to the console and you can see if the data is being parsed properly
 
 const dtab = document.querySelector('#tabs td:nth-of-type(1) div');
 const stab = document.querySelector('#tabs td:nth-of-type(2) div');
@@ -30,6 +31,14 @@ stab.addEventListener('click', function () {
 
 });
 
+function err(str, type='log') {
+    console[type](str);
+}
+
+function round(val, precision) {
+    return Number(val.toFixed(precision));
+}
+
 function all_changes() {
     const save = document.querySelector('.sbutton');
 
@@ -46,8 +55,25 @@ function all_changes() {
     })
 }
 
-const file_input = prompt('Enter file name');
-const db_name = file_input + '.csv';
+const file_info = prompt(`
+    Please enter file name and initial value like this
+    filename-value
+    `)
+
+let file_parts = file_info.split('-');
+let file_name = file_parts[0];
+let init_val = parseFloat(file_parts[1]);
+const db_name = `${file_name}.csv`;
+
+/* err(`
+    file_info: ${file_info}
+    file_parts: ${file_parts}
+    file_name: ${file_name}
+    init_val: ${init_val}
+    db_name: ${db_name}
+`);
+
+*/
 
 all_changes();
 
@@ -55,7 +81,41 @@ all_changes();
 const parseDate = d3.timeParse("%d-%m-%y | %H:%M");
 
 // Load the data from the TSV file
-d3.csv(db_name).then(data => {
+d3.csv(db_name).then(datas => {
+
+    // Checking if there is any data in the file
+    if (!datas || datas.length === 0) {
+	err(`No data loaded from file: ${db_name}`, 'error');
+	return;
+    }
+
+    // Getting the first date and decrementing by 1
+    const first_date = datas[0].date;
+    // err(`first_date: ${first_date}`);
+    fd_parts = first_date.split('-');
+    // err(`fd_parts: ${fd_parts}`);
+    fd_day = +fd_parts[0];
+    // err(`fd_day: ${fd_day}`);
+    new_day = fd_day - 1;
+    // err(`new_day: ${new_day}`);
+
+    // Creating new date ==> new_fd to use as the first value in the dataset
+    new_fd = `${new_day}-${fd_parts.slice(1).join('-')}`;
+    // err(`new_fd: ${new_fd}`);
+
+    const first_val = {
+	date: new_fd,
+	value: init_val
+    };
+    // err(`first_val: ${JSON.stringify(first_val)}`);
+
+    // Placing new data point at the beginning of the dataset
+    const data = [first_val, ...datas];
+
+    // err(`datas: ${JSON.stringify(datas)}`);
+    // err(`data: ${JSON.stringify(data)}`);
+
+    // Extract token data from end of file
     tkn_val = data[data.length - 2]
     ma_val = data[data.length - 1]
 
@@ -64,7 +124,94 @@ d3.csv(db_name).then(data => {
 
     user_val = ma_val.value;
 
-    document.querySelector('.main_head').innerHTML += ` [${asset_name}] [${time_frame}]<br>${user_val}`;
+    // Extracting data by month and its corresponding values
+    let parsed_data = data.map(row => {
+	let date_parts = row['date'].split(' ')[0].split('-');
+	let value = row['value'];
+	// err(`Date Parts: ${date_parts}`);
+	// err(`Row: ${value}`);
+	return {
+	    day: parseInt(date_parts[0]),
+	    month: parseInt(date_parts[1]),
+	    year: parseInt(date_parts[2]),
+	    value: parseFloat(value)
+	};
+    });
+    // err(`Parsed Data: ${parsed_data}`);
+    // Defining monthly arrays
+    let monthly_data = {
+	jan: [], feb: [], mar: [], apr: [], may: [], jun: [], jul: [], aug: [], sep: [], oct: [], nov: [], dec: []
+    };
+
+    // Defining month names to find the correct index in monthly data
+    let month_names = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+
+    // Placing the extracted data into their respective variables
+    parsed_data.forEach(entry => {
+	let month_index = entry.month - 1; // Converting month (1-12) into index (0-11)
+	let month_name = month_names[month_index];
+	if (monthly_data[month_name]) {
+	    monthly_data[month_name].push(entry.value);
+	} else {
+	    err(`Invalid month name: ${month_name} for entry ${entry}`, 'warn');
+	}
+    });
+
+    // Function to get averages
+    function get_avg(arr) {
+	let sum = arr.reduce((a,b) => a+b, 0);
+	return sum / arr.length;
+    }
+
+    // Function to get the standard deviation
+    function get_sd(arr, avg) {
+	let sq_diffs = arr.map(value => Math.pow(value - avg, 2));
+	let avg_sq_diff = sq_diffs.reduce((a,b) => a+b, 0) / (arr.length - 1);
+	return Math.sqrt(avg_sq_diff);
+    }
+
+    let results = {};
+    let rfr = 0.02; // risk free rate
+
+    for (let month in monthly_data) {
+	let values = monthly_data[month];
+	if (values.length > 0) {
+	    let average = get_avg(values);
+	    let st_dev = get_sd(values, average);
+	    let pnl = values.reduce((a,b) => a+b, 0); // Sum of all values for PnL
+	    let sh_ra = st_dev !== 0 ? (pnl - rfr) / st_dev : 0;
+
+	    results[month] = {
+		avg: round(average, 4),
+		sd: round(st_dev, 4),
+		pnl: round(pnl, 4),
+		sr: round(sh_ra, 4)
+	    };
+	}
+    }
+    // err(`Results: ${results}`);
+
+    new_rst = '';
+    const months = Object.keys(results);
+
+    for (let i=0; i < months.length; i++) {
+	let month = months[i];
+	let sd = results[month].sd;
+	let sr = results[month].sr;
+
+	if (i < months.length - 1) {
+	    new_rst += `${month.toUpperCase()} [ Sd: ${sd} | Sr: ${sr} ] - `;
+	} else {
+	    new_rst += `${month.toUpperCase()} [ Sd: ${sd} | Sr: ${sr} ]`;
+	}
+    }
+
+    // Place token data on screen
+    document.querySelector('.main_head').innerHTML += `
+	[${asset_name}] [${time_frame}]<br>
+	${user_val}<br>
+	${new_rst}
+    `;
 
     // Format the data and calculate relative values
     let hVal = 0;
@@ -72,15 +219,16 @@ d3.csv(db_name).then(data => {
 	d.date = parseDate(d.date);
 	d.value = +d.value; // Ensure this is properly parsed as a number
 
+	if (isNaN(d.value)) err(`Invalid value at index ${i}`, 'warn');
+
 	if (i > 0) {
 	    d.relativeValue = data[i - 1].relativeValue + (data[i - 1].relativeValue * (d.value / 100));
 	} else {
 	    d.relativeValue = d.value;
 	}
 
-	if (hVal < d.relativeValue) {
-	    hVal = d.relativeValue;
-	}
+	// Assign highest value in dataset to hVal
+	if (hVal < d.relativeValue) hVal = d.relativeValue;
 
 	// Assign unique ID for each data point
 	d.id = i; 
@@ -97,8 +245,8 @@ d3.csv(db_name).then(data => {
 
 	const dPoints = document.createElement('p');
 	dPoints.innerHTML = `Index: ${i + 1}<br>Date: ${d3.timeFormat("%d-%m-%y | %H:%M")(d.date)}<br>Value: ${d.value}<br>Chart Value: ${d.relativeValue.toFixed(2)}`;
-	dataDiv.appendChild(dPoints);
 
+	dataDiv.appendChild(dPoints);
 	dataContainer.appendChild(dataDiv);
     });
 
