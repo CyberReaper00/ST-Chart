@@ -13,6 +13,7 @@
 
     body {
 	background: #000000cf;
+	overflow: hidden;
     }
 
     h1 {
@@ -20,6 +21,10 @@
 	margin-bottom: -10px !important;
     }
 
+    .main_svg {
+	width: 85vw;
+	height: 92vw;
+    }
 
     .xline path, .yline path,
     .xline line, .yline line {
@@ -54,45 +59,57 @@
 	ry: 5px;
     }
 
+    .main_head{
+	text-align: center;
+    }
+
+    .info{
+	text-align: left;
+    }
+
     .menu_main {
 	position: fixed;
-	margin-left: 83.8vw;
-	margin-top: -17vh;
-	width: 16vw;
+	top: 0;
+	right: 0;
+	width: 14vw;
     }
 
     table {
 	width: 100%;
     }
 
-    #tab1 {
+    #tab {
 	height: 100%;
     }
 
-    #tab2 {
-	display: none;
-    }
-
     #view {
-	width: 92%;
-	height: 94vh;
+	width: 96%;
+	height: 99vh;
 	color: white;
 	padding: 6px;
 	margin-top: -6px;
 	background: var(--bgsb);
     }
 
+    .title {
+	text-align: center;
+	padding: 4px;
+	padding-bottom: 2px;
+	border-radius: 10px;
+	background: skyblue;
+    }
+
     .chart_type {
 	display: none;
     }
 
-    .data_view {
+    .data_view, .calc_view {
 	width: 100%;
-	height: 100%;
+	height: 98vh;
 	overflow-y: scroll;
 	overflow: auto; /* Enable scrolling */
-	scrollbar-width: none; /* Firefox */
-	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none;
+	-ms-overflow-style: none;
     }
 
     .data-entry {
@@ -122,7 +139,7 @@
 	border-radius: 10px;
     }
 
-    .sbutton {
+    .sv_btn {
 	border: none;
 	border-radius: 10px;
 	margin: 10px 19%; 
@@ -131,7 +148,7 @@
 	color: white;
     }
 
-    .sbutton:hover {
+    .sv_btn:hover {
 	background: #00000033;
 	cursor: pointer;
     }
@@ -140,42 +157,42 @@
     </head>
 
     <body>
-	<h1 class='main_head'>ST-3 PNL Risk Identification</h1>
+	<h1 class='main_head'>Welcome to RMC
+	    <br>
+	    <div class='info'></div>
+	</h1>
 	<div class='menu_main'>
 	    <table>
-		<tr id='tabs'>
-		    <td>
-			<div>Data</div>
-		    </td>
-		    <td>
-			<div>Calculations</div>
-		    </td>
-		    <td>
-			<div>Settings</div>
-		    </td>
-		</tr>
 		<tr>
 		    <td colspan='2'>
 			<div id='view'>
-			    <div id='tab1'>
+			    <div class='tab'>
+				<div class='title'>Data Points</div>
 				<div class='data_view'></div>
 			    </div>
-			    <div id="tab2">
+			    <div class='tab'>
+				<div class='title'>Calculations</div>
+				<div class='calc_view'></div>
+			    </div>
+			    <div class='tab'>
+				<div class='title'>Settings</div>
 				<select class="chart_type">
 				    <option value="line">Line Chart</option>
 				    <option value="bar">Bar Chart</option>
 				</select>
+				<input type='file' class='file_input' accept='.csv'>
+				<input type='number' class='init_val'>
 				<input class='r_val' type='number' placeholder='Changes the dot size'>
 				<input class='xy_val' type='text' placeholder='Changes color of the axes'>
 				<input class='ln_clr' type='text' placeholder='Changes color of the graph'>
-				<button class='sbutton'>Make Changes</button>
+				<button class='sv_btn'>Make Changes</button>
 			    </div>
 			</div>
 		    </td>
 		</tr>
 	    </table>
 	</div>
-	<svg width="85vw" height="80vh"></svg>
+	<svg class='main_svg'></svg>
 	<script src='main.js'></script>
     </body>
 
