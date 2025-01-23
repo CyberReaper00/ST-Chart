@@ -11,15 +11,8 @@
     --r-size: 4;
 }
 
-    body {
-	background: #000000cf;
-	overflow: hidden;
-    }
 
-    h1 {
-	color: white;
-	margin-bottom: -10px !important;
-    }
+    /* ============== SVG CSS ============== */
 
     .main_svg {
 	width: 85vw;
@@ -59,6 +52,20 @@
 	ry: 5px;
     }
 
+    /* ============== SVG CSS ============== */
+
+    /* ============== Webpage Element CSS ============== */
+
+    body {
+	background: #000000cf;
+	overflow: hidden;
+    }
+
+    h1 {
+	color: white;
+	margin-bottom: -10px !important;
+    }
+
     .main_head{
 	text-align: center;
     }
@@ -67,7 +74,7 @@
 	text-align: left;
     }
 
-    .menu_main {
+    .sidebar {
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -78,8 +85,13 @@
 	width: 100%;
     }
 
-    #tab {
-	height: 100%;
+    .tab {
+	height: 97%;
+	display: none;
+    }
+
+    div.tab:nth-of-type(3) {
+	display: block;
     }
 
     #view {
@@ -105,7 +117,7 @@
 
     .data_view, .calc_view {
 	width: 100%;
-	height: 98vh;
+	height: 100%;
 	overflow-y: scroll;
 	overflow: auto; /* Enable scrolling */
 	scrollbar-width: none;
@@ -124,12 +136,17 @@
 	background: #00000066;
     }
 
+    label {
+	display: block;
+	margin-top: 10px;
+    }
+
     input {
 	width: 90%;
 	border: none;
 	border-radius: 10px;
 	padding: 4px;
-	margin: 10px 0px 0px 0px;
+	margin-top: 4px;
     }
 
     select {
@@ -139,19 +156,7 @@
 	border-radius: 10px;
     }
 
-    .sv_btn {
-	border: none;
-	border-radius: 10px;
-	margin: 10px 19%; 
-	padding: 4px 8px;
-	background: #00000088;
-	color: white;
-    }
-
-    .sv_btn:hover {
-	background: #00000033;
-	cursor: pointer;
-    }
+    /* ============== Webpage Element CSS ============== */
 
 	</style>
     </head>
@@ -161,7 +166,8 @@
 	    <br>
 	    <div class='info'></div>
 	</h1>
-	<div class='menu_main'>
+	<svg class='main_svg'></svg>
+	<div class='sidebar'>
 	    <table>
 		<tr>
 		    <td colspan='2'>
@@ -176,23 +182,35 @@
 			    </div>
 			    <div class='tab'>
 				<div class='title'>Settings</div>
+				<label class="chart_type">Chart Type</label>
 				<select class="chart_type">
 				    <option value="line">Line Chart</option>
 				    <option value="bar">Bar Chart</option>
 				</select>
-				<input type='file' class='file_input' accept='.csv'>
-				<input type='number' class='init_val'>
-				<input class='r_val' type='number' placeholder='Changes the dot size'>
-				<input class='xy_val' type='text' placeholder='Changes color of the axes'>
-				<input class='ln_clr' type='text' placeholder='Changes color of the graph'>
-				<button class='sv_btn'>Make Changes</button>
+				<label>Choose File
+				    <input type='file' onclick="replace()" class='file_input' accept='.csv'>
+				</label>
+				<label>Initial Trade Amount
+				    <input type='number' class='init_val'>
+				</label>
+				<label>Risk Free Rate
+				    <input type='number' class='rfr_val'>
+				</label>
+				<label>Dot Size
+				    <input class='r_val' type='number'>
+				</label>
+				<label>Color of Axes
+				    <input class='xy_val' type='text'>
+				</label>
+				<label>Color of Graph
+				    <input class='ln_clr' type='text'>
+				</label>
 			    </div>
 			</div>
 		    </td>
 		</tr>
 	    </table>
 	</div>
-	<svg class='main_svg'></svg>
 	<script src='main.js'></script>
     </body>
 
