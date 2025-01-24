@@ -95,7 +95,7 @@
     }
 
     #view {
-	width: 96%;
+	width: 94%;
 	height: 99vh;
 	color: white;
 	padding: 6px;
@@ -113,6 +113,19 @@
 
     .chart_type {
 	display: none;
+    }
+
+    #file_selected {
+	color: white;
+	background: black;
+	border-radius: 10px;
+	padding: 4px 10px;
+	width: fit-content;
+	cursor: pointer;
+    }
+
+    #file_selected:hover {
+	background: #333;
     }
 
     .data_view, .calc_view {
@@ -136,13 +149,17 @@
 	background: #00000066;
     }
 
+    input[file] {
+
+    }
+
     label {
 	display: block;
 	margin-top: 10px;
     }
 
     input {
-	width: 90%;
+	width: 96%;
 	border: none;
 	border-radius: 10px;
 	padding: 4px;
@@ -187,9 +204,8 @@
 				    <option value="line">Line Chart</option>
 				    <option value="bar">Bar Chart</option>
 				</select>
-				<label>Choose File
-				    <input type='file' onclick="replace()" class='file_input' accept='.csv'>
-				</label>
+				<label for='file_input' id='file_selected' onclick="erase()">Choose File</label>
+				<input type='file' style='display:none' id='file_input' accept='.csv'>
 				<label>Initial Trade Amount
 				    <input type='number' class='init_val'>
 				</label>

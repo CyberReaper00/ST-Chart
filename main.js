@@ -52,7 +52,7 @@ function all_changes() {
 
 all_changes();
 
-function replace() {
+function erase() {
     const selection = [
 	fn.select('.main_svg', 'get_svg'),
 	fn.select('.data_view', 'd_view'),
@@ -64,7 +64,7 @@ function replace() {
     });
 }
 
-replace();
+erase();
 
 const mappings = {
     'a': 0,
@@ -87,7 +87,8 @@ document.addEventListener('keydown', function(event) {
 function get_file_contents(file_input_id) {
     return new Promise((resolve, reject) => {
 	fn.select(file_input_id, 'file_input');
-	const file = vars.file_input.files[0];
+	const file_input = vars.file_input;
+	const file = file_input.files[0];
 
 	if (!file) {
 	    reject('No file selected');
@@ -102,11 +103,13 @@ function get_file_contents(file_input_id) {
 	    reject('Error reading the file');
 	};
 	reader.readAsText(file);
+
+	file_input.value = '';
     });
 }
 
-fn.select('.file_input').addEventListener('change', function() {
-    get_file_contents('.file_input').then((file_contents) => {
+fn.select('#file_input').addEventListener('change', function() {
+    get_file_contents('#file_input').then((file_contents) => {
 
 	// Parse the date and time
 	const parseDate = d3.timeParse("%d-%m-%y | %H:%M");
