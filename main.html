@@ -116,15 +116,21 @@
     }
 
     #file_selected {
+	padding: 4px 0px;
+    }
+
+    #file_selected, input[type='button'] {
 	color: white;
+	font-size: 16px;
+	font-family: sans-serif;
+	text-align: center;
 	background: black;
-	border-radius: 10px;
-	padding: 4px 10px;
-	width: fit-content;
+	border-radius: 20px;
+	width: 120px;
 	cursor: pointer;
     }
 
-    #file_selected:hover {
+    #file_selected:hover, input[type='button']:hover {
 	background: #333;
     }
 
@@ -149,9 +155,6 @@
 	background: #00000066;
     }
 
-    input[file] {
-
-    }
 
     label {
 	display: block;
@@ -204,8 +207,9 @@
 				    <option value="line">Line Chart</option>
 				    <option value="bar">Bar Chart</option>
 				</select>
-				<label for='file_input' id='file_selected' onclick="erase()">Choose File</label>
-				<input type='file' style='display:none' id='file_input' accept='.csv'>
+				<input type='button' value='Get File' id='server_file' onclick="erase()">
+				<input type='file' style='display:none' id='lcl_file' accept='.csv'>
+				<label for='lcl_file' id='file_selected' onclick="erase()">Choose File</label>
 				<label>Initial Trade Amount
 				    <input type='number' class='init_val'>
 				</label>
